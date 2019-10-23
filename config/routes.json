@@ -1,0 +1,124 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/general-settings",
+      "handler": "GeneralSettings.getGeneralSettings",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/general-settings",
+      "handler": "GeneralSettings.updateGeneralSettings",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content-types",
+      "handler": "ContentTypes.listContentTypes",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content-types/:uid",
+      "handler": "ContentTypes.findContentType",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/content-types/:uid",
+      "handler": "ContentTypes.updateContentType",
+      "config": {
+        "policies": ["routing"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "handler": "Groups.listGroups",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/:uid",
+      "handler": "Groups.findGroup",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/:uid",
+      "handler": "Groups.updateGroup",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/explorer/:model",
+      "handler": "ContentManager.find",
+      "config": {
+        "policies": ["routing"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/explorer/:model/count",
+      "handler": "ContentManager.count",
+      "config": {
+        "policies": ["routing"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/explorer/:model/:id",
+      "handler": "ContentManager.findOne",
+      "config": {
+        "policies": ["routing"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/explorer/:model",
+      "handler": "ContentManager.create",
+      "config": {
+        "policies": ["routing"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/explorer/:model/:id",
+      "handler": "ContentManager.update",
+      "config": {
+        "policies": ["routing"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/explorer/deleteAll/:model",
+      "handler": "ContentManager.deleteMany",
+      "config": {
+        "policies": ["routing"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/explorer/:model/:id",
+      "handler": "ContentManager.delete",
+      "config": {
+        "policies": ["routing"]
+      }
+    }
+  ]
+}
