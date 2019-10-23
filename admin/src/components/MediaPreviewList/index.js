@@ -12,8 +12,6 @@ import {
   MediaPreviewText,
 } from './StyledMediaPreviewList';
 
-const IMAGE_PREVIEW_COUNT = 3;
-
 function MediaPreviewList({ hoverable, files }) {
   const getFileType = fileName => fileName.split('.').slice(-1)[0];
   const getSrc = fileURL =>
@@ -75,9 +73,8 @@ function MediaPreviewList({ hoverable, files }) {
     return files.map((file, index) => {
       return (
         <React.Fragment key={JSON.stringify(file)}>
-          {index === IMAGE_PREVIEW_COUNT &&
-          files.length > IMAGE_PREVIEW_COUNT + 1
-            ? renderText(files.length - IMAGE_PREVIEW_COUNT)
+          {index === 3 && files.length - 4 > 0
+            ? renderText(files.length - 4)
             : renderItem(file)}
         </React.Fragment>
       );

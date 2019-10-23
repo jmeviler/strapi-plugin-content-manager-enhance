@@ -6,45 +6,37 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from './Button';
-import Wrapper from './Wrapper';
+import cn from 'classnames';
+
+import styles from './styles.scss';
 
 class StyleButton extends React.Component {
-  handleClick = e => {
+  handleClick = (e) => {
     e.preventDefault();
 
     if (!this.props.disabled) {
-      this.props.handlers[this.props.handler](
-        this.props.text,
-        this.props.style
-      );
+      this.props.handlers[this.props.handler](this.props.text, this.props.style);
     }
-  };
+  }
 
   render() {
-    const { active, className: type, disabled } = this.props;
-
     return (
-      <Button
-        active={active}
-        disabled={disabled}
+      <div
+        className={cn(
+          this.props.active && styles.styleButtonActive,
+          styles.styleButton,
+          this.props.className && styles[this.props.className],
+          this.props.disabled && styles.styleButtonDisabled,
+        )}
         onMouseDown={this.handleClick}
-        type={type}
       >
         {!this.props.hideLabel && this.props.label}
-      </Button>
+      </div>
     );
   }
 }
 
-const WysiwygInlineControls = ({
-  buttons,
-  disabled,
-  editorState,
-  handlers,
-  onToggle,
-  onToggleBlock,
-}) => {
+const  WysiwygInlineControls = ({ buttons, disabled, editorState, handlers, onToggle, onToggleBlock }) => {
   const selection = editorState.getSelection();
   const blockType = editorState
     .getCurrentContent()
@@ -54,7 +46,7 @@ const WysiwygInlineControls = ({
   const currentStyle = editorState.getCurrentInlineStyle();
 
   return (
-    <Wrapper>
+    <div className={cn(styles.wysiwygInlineControls)}>
       {buttons.map(type => (
         <StyleButton
           key={type.label}
@@ -71,7 +63,7 @@ const WysiwygInlineControls = ({
           text={type.text}
         />
       ))}
-    </Wrapper>
+    </div>
   );
 };
 

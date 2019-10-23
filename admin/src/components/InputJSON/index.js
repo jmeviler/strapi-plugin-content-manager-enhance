@@ -43,7 +43,6 @@ class InputJSON extends React.Component {
       styleSelectedText: true,
       tabSize: 2,
       theme: DEFAULT_THEME,
-      fontSize: '13px',
     });
     this.codeMirror.on('change', this.handleChange);
     this.codeMirror.on('blur', this.handleBlur);

@@ -95,13 +95,12 @@ module.exports = {
       strapi.emit('didCreateFirstContentTypeEntry', ctx.params, source);
     } catch (error) {
       strapi.log.error(error);
-      ctx.badRequest(null, [
-        {
-          messages: [
-            { id: error.message, message: error.message, field: error.field },
-          ],
-        },
-      ]);
+      ctx.badRequest(
+        null,
+        ctx.request.admin
+          ? [{ messages: [{ id: error.message, field: error.field }] }]
+          : error.message
+      );
     }
   },
 
@@ -132,13 +131,12 @@ module.exports = {
       }
     } catch (error) {
       strapi.log.error(error);
-      ctx.badRequest(null, [
-        {
-          messages: [
-            { id: error.message, message: error.message, field: error.field },
-          ],
-        },
-      ]);
+      ctx.badRequest(
+        null,
+        ctx.request.admin
+          ? [{ messages: [{ id: error.message, field: error.field }] }]
+          : error.message
+      );
     }
   },
 

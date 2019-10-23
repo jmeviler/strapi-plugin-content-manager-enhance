@@ -39,7 +39,6 @@ const FormWrapper = styled.div`
   padding-top: 27px;
   padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 8px;
   border-top: 1px solid
     ${({ hasErrors, isOpen }) => {
       if (hasErrors) {

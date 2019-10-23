@@ -18,7 +18,7 @@ import { isEmpty, isNaN, replace, words } from 'lodash';
 import cn from 'classnames';
 
 import { request } from 'strapi-helper-plugin';
-import { WysiwygProvider } from '../../contexts/Wysiwyg';
+
 import Controls from '../WysiwygInlineControls';
 import Drop from '../WysiwygDropUpload';
 import WysiwygBottomControls from '../WysiwygBottomControls';
@@ -43,7 +43,7 @@ import {
   onTab,
   updateSelection,
 } from './utils';
-import EditorWrapper from './EditorWrapper';
+import styles from './styles.scss';
 
 /* eslint-disable react/jsx-handler-names */
 /* eslint-disable react/sort-comp */
@@ -67,6 +67,15 @@ class Wysiwyg extends React.Component {
       return this.domEditor.blur();
     };
   }
+
+  getChildContext = () => ({
+    handleChangeSelect: this.handleChangeSelect,
+    headerValue: this.state.headerValue,
+    html: this.props.value,
+    isPreviewMode: this.state.isPreviewMode,
+    isFullscreen: this.state.isFullscreen,
+    placeholder: this.props.placeholder,
+  });
 
   componentDidMount() {
     if (this.props.autoFocus) {
@@ -639,18 +648,18 @@ class Wysiwyg extends React.Component {
    */
   sendData = editorState => {
     if (
-      this.getEditorState().getCurrentContent() !==
-        editorState.getCurrentContent() ||
-      editorState.getLastChangeType() === 'remove-range'
-    ) {
-      this.props.onChange({
-        target: {
-          value: editorState.getCurrentContent().getPlainText(),
-          name: this.props.name,
-          type: 'textarea',
-        },
-      });
-    } else return;
+      this.getEditorState().getCurrentContent() ===
+      editorState.getCurrentContent()
+    )
+      return;
+
+    this.props.onChange({
+      target: {
+        value: editorState.getCurrentContent().getPlainText(),
+        name: this.props.name,
+        type: 'textarea',
+      },
+    });
   };
 
   toggleFullScreen = e => {
@@ -664,7 +673,9 @@ class Wysiwyg extends React.Component {
   uploadFile = files => {
     const formData = new FormData();
     formData.append('files', files[0]);
-    const headers = {};
+    const headers = {
+      'X-Forwarded-Host': 'strapi',
+    };
 
     let newEditorState = this.getEditorState();
 
@@ -756,119 +767,122 @@ class Wysiwyg extends React.Component {
     const editorStyle = isFullscreen ? { marginTop: '0' } : this.props.style;
 
     return (
-      <WysiwygProvider
-        handleChangeSelect={this.handleChangeSelect}
-        headerValue={this.state.headerValue}
-        html={this.props.value}
-        isPreviewMode={this.state.isPreviewMode}
-        isFullscreen={this.state.isFullscreen}
-        placeholder={this.props.placeholder}
-      >
-        <EditorWrapper isFullscreen={isFullscreen}>
-          {/* FIRST EDITOR WITH CONTROLS} */}
-          <div
-            className={cn(
-              'editorWrapper',
-              !this.props.deactivateErrorHighlight &&
-                this.props.error &&
-                'editorError',
-              !isEmpty(this.props.className) && this.props.className
-            )}
-            onClick={e => {
-              if (isFullscreen) {
-                e.preventDefault();
-                e.stopPropagation();
-              }
-            }}
-            onDragEnter={this.handleDragEnter}
-            onDragOver={this.handleDragOver}
-            style={editorStyle}
-          >
-            {this.state.isDraging && this.renderDrop()}
-            <div className="controlsContainer">
-              <CustomSelect />
-              {CONTROLS.map((value, key) => (
-                <Controls
-                  key={key}
-                  buttons={value}
-                  disabled={isPreviewMode}
-                  editorState={editorState}
-                  handlers={{
-                    addContent: this.addContent,
-                    addOlBlock: this.addOlBlock,
-                    addSimpleBlockWithSelection: this
-                      .addSimpleBlockWithSelection,
-                    addUlBlock: this.addUlBlock,
-                  }}
-                  onToggle={this.toggleInlineStyle}
-                  onToggleBlock={this.toggleBlockType}
-                />
-              ))}
-              {!isFullscreen ? (
-                <ToggleMode
-                  isPreviewMode={isPreviewMode}
-                  onClick={this.handleClickPreview}
-                />
-              ) : (
-                <div style={{ marginRight: '10px' }} />
-              )}
-            </div>
-            {/* WYSIWYG PREVIEW NOT FULLSCREEN */}
-            {isPreviewMode ? (
-              <PreviewWysiwyg data={this.props.value} />
-            ) : (
-              <div
-                className={cn('editor', isFullscreen && 'editorFullScreen')}
-                onClick={this.focus}
-              >
-                <WysiwygEditor
-                  blockStyleFn={getBlockStyle}
-                  editorState={editorState}
-                  handleKeyCommand={this.handleKeyCommand}
-                  handlePastedFiles={this.handlePastedFiles}
-                  handleReturn={this.handleReturn}
-                  keyBindingFn={this.mapKeyToEditorCommand}
-                  onBlur={this.handleBlur}
-                  onChange={this.onChange}
-                  onTab={this.handleTab}
-                  placeholder={this.props.placeholder}
-                  setRef={editor => (this.domEditor = editor)}
-                  stripPastedStyles
-                  tabIndex={this.props.tabIndex}
-                />
-                <input className="editorInput" tabIndex="-1" />
-              </div>
-            )}
-            {!isFullscreen && (
-              <WysiwygBottomControls
-                isPreviewMode={isPreviewMode}
-                onClick={this.toggleFullScreen}
-                onChange={this.handleDrop}
+      <div className={cn(isFullscreen && styles.fullscreenOverlay)}>
+        {/* FIRST EDITOR WITH CONTROLS} */}
+        <div
+          className={cn(
+            styles.editorWrapper,
+            !this.props.deactivateErrorHighlight &&
+              this.props.error &&
+              styles.editorError,
+            !isEmpty(this.props.className) && this.props.className
+          )}
+          onClick={e => {
+            if (isFullscreen) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+          onDragEnter={this.handleDragEnter}
+          onDragOver={this.handleDragOver}
+          style={editorStyle}
+        >
+          {this.state.isDraging && this.renderDrop()}
+          <div className={styles.controlsContainer}>
+            <CustomSelect />
+            {CONTROLS.map((value, key) => (
+              <Controls
+                key={key}
+                buttons={value}
+                disabled={isPreviewMode}
+                editorState={editorState}
+                handlers={{
+                  addContent: this.addContent,
+                  addOlBlock: this.addOlBlock,
+                  addSimpleBlockWithSelection: this.addSimpleBlockWithSelection,
+                  addUlBlock: this.addUlBlock,
+                }}
+                onToggle={this.toggleInlineStyle}
+                onToggleBlock={this.toggleBlockType}
               />
+            ))}
+            {!isFullscreen ? (
+              <ToggleMode
+                isPreviewMode={isPreviewMode}
+                onClick={this.handleClickPreview}
+              />
+            ) : (
+              <div style={{ marginRight: '10px' }} />
             )}
           </div>
-          {/* PREVIEW WYSIWYG FULLSCREEN */}
-          {isFullscreen && (
+          {/* WYSIWYG PREVIEW NOT FULLSCREEN */}
+          {isPreviewMode ? (
+            <PreviewWysiwyg data={this.props.value} />
+          ) : (
             <div
-              className={cn('editorWrapper')}
-              onClick={e => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-              style={{ marginTop: '0' }}
+              className={cn(
+                styles.editor,
+                isFullscreen && styles.editorFullScreen
+              )}
+              onClick={this.focus}
             >
-              <PreviewControl
-                onClick={this.toggleFullScreen}
-                characters={this.getCharactersNumber()}
+              <WysiwygEditor
+                blockStyleFn={getBlockStyle}
+                editorState={editorState}
+                handleKeyCommand={this.handleKeyCommand}
+                handlePastedFiles={this.handlePastedFiles}
+                handleReturn={this.handleReturn}
+                keyBindingFn={this.mapKeyToEditorCommand}
+                onBlur={this.handleBlur}
+                onChange={this.onChange}
+                onTab={this.handleTab}
+                placeholder={this.props.placeholder}
+                setRef={editor => (this.domEditor = editor)}
+                stripPastedStyles
+                tabIndex={this.props.tabIndex}
               />
-              <PreviewWysiwyg data={this.props.value} />
+              <input className={styles.editorInput} tabIndex="-1" />
             </div>
           )}
-        </EditorWrapper>
-      </WysiwygProvider>
+          {!isFullscreen && (
+            <WysiwygBottomControls
+              isPreviewMode={isPreviewMode}
+              onClick={this.toggleFullScreen}
+              onChange={this.handleDrop}
+            />
+          )}
+        </div>
+        {/* PREVIEW WYSIWYG FULLSCREEN */}
+        {isFullscreen && (
+          <div
+            className={cn(styles.editorWrapper)}
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            style={{ marginTop: '0' }}
+          >
+            <PreviewControl
+              onClick={this.toggleFullScreen}
+              characters={this.getCharactersNumber()}
+            />
+            <PreviewWysiwyg data={this.props.value} />
+          </div>
+        )}
+      </div>
     );
   }
 }
+
+Wysiwyg.childContextTypes = {
+  handleChangeSelect: PropTypes.func,
+  headerValue: PropTypes.string,
+  html: PropTypes.string,
+  isFullscreen: PropTypes.bool,
+  isPreviewMode: PropTypes.bool,
+  placeholder: PropTypes.string,
+  previewHTML: PropTypes.func,
+};
 
 Wysiwyg.defaultProps = {
   autoFocus: false,

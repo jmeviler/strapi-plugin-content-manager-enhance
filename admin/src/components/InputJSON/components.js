@@ -6,10 +6,6 @@ const Wrapper = styled.div`
   margin-bottom: -14px;
   line-height: 18px;
 
-  .CodeMirror {
-    font-size: 13px !important;
-  }
-
   > div {
     border-radius: 3px;
 

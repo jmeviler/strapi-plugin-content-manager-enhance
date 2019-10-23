@@ -13,7 +13,7 @@ export const CONTROLS = [
     {
       label: 'B',
       style: 'BOLD',
-      className: 'bold',
+      className: 'styleButtonBold',
       hideLabel: true,
       handler: 'addContent',
       text: '**textToReplace**',
@@ -21,7 +21,7 @@ export const CONTROLS = [
     {
       label: 'I',
       style: 'ITALIC',
-      className: 'italic',
+      className: 'styleButtonItalic',
       hideLabel: true,
       handler: 'addContent',
       text: '*textToReplace*',
@@ -29,7 +29,7 @@ export const CONTROLS = [
     {
       label: 'U',
       style: 'UNDERLINE',
-      className: 'underline',
+      className: 'styleButtonUnderline',
       hideLabel: true,
       handler: 'addContent',
       text: '__textToReplace__',
@@ -37,7 +37,7 @@ export const CONTROLS = [
     {
       label: 'S',
       style: 'STRIKED',
-      className: 'striked',
+      className: 'styleButtonStrikedOut',
       hideLabel: true,
       handler: 'addContent',
       text: '~~textToReplace~~',
@@ -45,7 +45,7 @@ export const CONTROLS = [
     {
       label: 'UL',
       style: 'unordered-list-item',
-      className: 'ul',
+      className: 'styleButtonUL',
       hideLabel: true,
       handler: 'addUlBlock',
       text: '- textToReplace',
@@ -53,7 +53,7 @@ export const CONTROLS = [
     {
       label: 'OL',
       style: 'ordered-list-item',
-      className: 'ol',
+      className: 'styleButtonOL',
       hideLabel: true,
       handler: 'addOlBlock',
       text: '1. textToReplace',
@@ -63,7 +63,7 @@ export const CONTROLS = [
     {
       label: '<>',
       style: 'CODE',
-      className: 'code',
+      className: 'styleButtonCodeBlock',
       hideLabel: true,
       handler: 'addSimpleBlockWithSelection',
       text: '```textToReplace```',
@@ -71,7 +71,7 @@ export const CONTROLS = [
     {
       label: 'img',
       style: 'IMG',
-      className: 'img',
+      className: 'styleButtonImg',
       hideLabel: true,
       handler: 'addSimpleBlockWithSelection',
       text: '![text](textToReplace)',
@@ -79,7 +79,7 @@ export const CONTROLS = [
     {
       label: 'Link',
       style: 'LINK',
-      className: 'link',
+      className: 'styleButtonLink',
       hideLabel: true,
       handler: 'addContent',
       text: '[text](textToReplace)',
@@ -87,7 +87,7 @@ export const CONTROLS = [
     {
       label: 'quotes',
       style: 'BLOCKQUOTE',
-      className: 'quote',
+      className: 'styleButtonBlockQuote',
       hideLabel: true,
       handler: 'addSimpleBlockWithSelection',
       text: '> textToReplace',

@@ -7,21 +7,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Span, Wrapper } from './components';
+
+import styles from './styles.scss';
 
 const WysiwygBottomControls = ({ isPreviewMode, onChange, onClick }) => {
   const browse = (
     <FormattedMessage id="components.WysiwygBottomControls.uploadFiles.browse">
-      {message => <Span>{message}</Span>}
+      {(message) => <span className={styles.underline}>{message}</span>}
     </FormattedMessage>
   );
 
   return (
-    <Wrapper>
+    <div className={styles.wysiwygBottomControlsWrapper}>
       <div>
         <label
-          className="dropLabel"
-          onClick={e => {
+          className={styles.dropLabel}
+          onClick={(e) => {
             if (isPreviewMode) {
               e.preventDefault();
             }
@@ -34,10 +35,10 @@ const WysiwygBottomControls = ({ isPreviewMode, onChange, onClick }) => {
           <input type="file" onChange={onChange} />
         </label>
       </div>
-      <div className="fullScreenWrapper" onClick={onClick}>
+      <div className={styles.fullScreenWrapper} onClick={onClick}>
         <FormattedMessage id="components.WysiwygBottomControls.fullscreen" />
       </div>
-    </Wrapper>
+    </div>
   );
 };
 

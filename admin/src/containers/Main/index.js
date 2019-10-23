@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { Switch, Route } from 'react-router-dom';
-import {
-  LoadingIndicatorPage,
-  getQueryParameters,
-  useGlobalContext,
-} from 'strapi-helper-plugin';
+import { LoadingIndicatorPage, getQueryParameters } from 'strapi-helper-plugin';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
@@ -26,6 +22,7 @@ import saga from './saga';
 import makeSelectMain from './selectors';
 
 function Main({
+  emitEvent,
   getData,
   getLayout,
   groups,
@@ -39,7 +36,6 @@ function Main({
 }) {
   strapi.useInjectReducer({ key: 'main', reducer, pluginId });
   strapi.useInjectSaga({ key: 'main', saga, pluginId });
-  const { emitEvent } = useGlobalContext();
   const slug = pathname.split('/')[3];
   const source = getQueryParameters(search, 'source');
   const getDataRef = useRef();
@@ -110,6 +106,7 @@ function Main({
 }
 
 Main.propTypes = {
+  emitEvent: PropTypes.func.isRequired,
   getData: PropTypes.func.isRequired,
   getLayout: PropTypes.func.isRequired,
   global: PropTypes.shape({

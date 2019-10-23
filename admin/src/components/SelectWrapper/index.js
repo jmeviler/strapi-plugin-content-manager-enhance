@@ -32,12 +32,11 @@ function SelectWrapper({
     pathname,
     search,
   } = useEditView();
-  const source = isEmpty(plugin) ? 'content-manager' : plugin;
   const [state, setState] = useState({
     _q: '',
     _limit: 20,
     _start: 0,
-    source,
+    source: isEmpty(plugin) ? 'content-manager' : plugin,
   });
   const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -129,7 +128,7 @@ function SelectWrapper({
   const nextSearch = `${pathname}${search}`;
   const to = `/plugins/${pluginId}/${targetModel}/${
     value ? value.id : null
-  }?source=${source}&redirectUrl=${nextSearch}`;
+  }?redirectUrl=${nextSearch}`;
   const link =
     value === null ||
     value === undefined ||
@@ -186,7 +185,6 @@ function SelectWrapper({
             placeholder
           )
         }
-        source={source}
         targetModel={targetModel}
         value={value}
       />

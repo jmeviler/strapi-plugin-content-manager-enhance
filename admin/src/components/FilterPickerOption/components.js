@@ -34,8 +34,7 @@ const Button = styled.button`
         &:after {
           content: '\f068';
           font-family: FontAwesome;
-          font-size: 12px;
-          line-height: 18px;
+          font-size: 8px;
           color: #007eff;
         }
       `;
@@ -44,8 +43,8 @@ const Button = styled.button`
       &:after {
         content: '\f067';
         font-family: FontAwesome;
-        font-size: 12px;
-        line-height: 18px;
+        font-size: 8px;
+        font-weight: 400;
         color: #007eff;
       }
     `;

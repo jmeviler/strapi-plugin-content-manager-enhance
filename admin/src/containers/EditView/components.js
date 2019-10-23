@@ -28,9 +28,6 @@ const LinkWrapper = styled(SubWrapper)`
     &:first-of-type {
       border-color: transparent;
     }
-    &:not(:first-of-type) {
-      margin-top: 0;
-    }
   }
 `;
 

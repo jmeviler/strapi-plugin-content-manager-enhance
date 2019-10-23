@@ -20,6 +20,8 @@ import {
 
 import InputJSON from '../InputJSON';
 
+import styles from './styles.scss';
+
 class InputJSONWithErrors extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
   state = { errors: [], hasInitialValue: false };
@@ -95,6 +97,7 @@ class InputJSONWithErrors extends React.Component {
       onBlur,
       placeholder,
       resetProps,
+      style,
       tabIndex,
       value,
     } = this.props;
@@ -108,12 +111,12 @@ class InputJSONWithErrors extends React.Component {
 
     return (
       <div
-        className={cn(customBootstrapClass, !isEmpty(className) && className)}
-        style={{
-          marginBottom: '1.5rem',
-          fontSize: '1.3rem',
-          fontFamily: 'Lato',
-        }}
+        className={cn(
+          styles.containerJSON,
+          customBootstrapClass,
+          !isEmpty(className) && className
+        )}
+        style={style}
       >
         <Label
           className={labelClassName}
@@ -173,6 +176,7 @@ InputJSONWithErrors.defaultProps = {
   onBlur: false,
   placeholder: '',
   resetProps: false,
+  style: {},
   tabIndex: '0',
   validations: {},
   value: null,
@@ -215,6 +219,7 @@ InputJSONWithErrors.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   resetProps: PropTypes.bool,
+  style: PropTypes.object,
   tabIndex: PropTypes.string,
   validations: PropTypes.object,
   value: PropTypes.oneOfType([

@@ -17,8 +17,9 @@ import {
   CharacterMetadata,
 } from 'draft-js';
 import { List, OrderedSet, Repeat, fromJS } from 'immutable';
+import cn from 'classnames';
 import { isEmpty, toArray } from 'lodash';
-import { WysiwygContext } from '../../contexts/Wysiwyg';
+
 import WysiwygEditor from '../WysiwygEditor';
 import converter from './converter';
 import {
@@ -27,22 +28,23 @@ import {
   findImageEntities,
   findVideoEntities,
 } from './strategies';
-import PreviewWysiwygWrapper from './PreviewWysiwygWrapper';
+
 import Image from './image';
 import Link from './link';
 import Video from './video';
 
+import styles from './componentsStyles.scss';
 /* eslint-disable react/no-unused-state */
 function getBlockStyle(block) {
   switch (block.getType()) {
     case 'blockquote':
-      return 'editorBlockquote';
+      return styles.editorBlockquote;
     case 'code-block':
-      return 'editorCodeBlock';
+      return styles.editorCodeBlock;
     case 'unstyled':
-      return 'editorParagraph';
+      return styles.editorParagraph;
     case 'unordered-list-item':
-      return 'unorderedList';
+      return styles.unorderedList;
     case 'ordered-list-item':
     case 'header-one':
     case 'header-two':
@@ -139,8 +141,6 @@ const createContentBlock = (blockData = {}) => {
 class PreviewWysiwyg extends React.PureComponent {
   state = { editorState: EditorState.createEmpty(), isMounted: false };
 
-  static contextType = WysiwygContext;
-
   componentDidMount() {
     const { data } = this.props;
     this.setState({ isMounted: true });
@@ -171,6 +171,18 @@ class PreviewWysiwyg extends React.PureComponent {
   componentWillUnmount() {
     this.setState({ isMounted: false });
   }
+
+  getClassName = () => {
+    if (this.context.isFullscreen) {
+      return cn(
+        styles.editor,
+        styles.editorFullScreen,
+        styles.fullscreenPreviewEditor
+      );
+    }
+
+    return styles.editor;
+  };
 
   previewHTML = rawContent => {
     const initHtml = isEmpty(rawContent) ? '<p></p>' : rawContent;
@@ -229,9 +241,9 @@ class PreviewWysiwyg extends React.PureComponent {
 
   render() {
     const { placeholder } = this.context;
-
+    // this.previewHTML2(this.props.data);
     return (
-      <PreviewWysiwygWrapper isFullscreen={this.context.isFullscreen}>
+      <div className={this.getClassName()}>
         <WysiwygEditor
           blockStyleFn={getBlockStyle}
           editorState={this.state.editorState}
@@ -239,15 +251,20 @@ class PreviewWysiwyg extends React.PureComponent {
           placeholder={placeholder}
         />
         <input
-          className="editorInput"
+          className={styles.editorInput}
           value=""
           onChange={() => {}}
           tabIndex="-1"
         />
-      </PreviewWysiwygWrapper>
+      </div>
     );
   }
 }
+
+PreviewWysiwyg.contextTypes = {
+  isFullscreen: PropTypes.bool,
+  placeholder: PropTypes.string,
+};
 
 PreviewWysiwyg.defaultProps = {
   data: '',

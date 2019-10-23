@@ -5,13 +5,20 @@
  */
 
 import React from 'react';
-import Label from './Label';
+import styles from './styles.scss';
 
-const WysiwygDropUpload = props => {
+const WysiwygDropUpload = (props) => {
   return (
-    <Label {...props}>
-      <input onChange={() => {}} type="file" tabIndex="-1" />
-    </Label>
+    <label
+      {...props}
+      className={styles.wysiwygDropUpload}
+    >
+      <input
+        onChange={() => {}}
+        type="file"
+        tabIndex="-1"
+      />
+    </label>
   );
 };
 
